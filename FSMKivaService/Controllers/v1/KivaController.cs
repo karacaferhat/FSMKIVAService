@@ -18,9 +18,9 @@ namespace FSMKivaService.Controllers.v1
         private readonly BasicDataContext _context;
         public KivaController(BasicDataContext context)
         {
-            _context = context;
+            _context = context; 
         }
-
+         
 
         [HttpPost("getSerialState")]
         public ActionResult<GetSerialStateResponse> GetSerialState(GetSerialStateRequest request)
@@ -36,6 +36,17 @@ namespace FSMKivaService.Controllers.v1
             return Ok(new GetSerialStateResponse{Code = model.Code, Name = model.Name, State = model.State });
         }
 
+        [HttpPost("setSerialServiceState")]
+        public ActionResult<SetSerialServiceStateResponse> SetSerialServiceState(SetSerialServiceStateRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("Model State Is Not Valid");
+
+            var response = _context.SetSerialServiceState(request);
+         
+
+            return Ok(response);
+        }
 
         [HttpPost("getDeliveryInfo")]
         public ActionResult<GetDeliveryInfoResponse> GetDeliveryInfo(GetDeliveryInfoRequest request)

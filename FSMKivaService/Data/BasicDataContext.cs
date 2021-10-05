@@ -1,5 +1,6 @@
 ﻿using FSMKivaService.Entities;
 using FSMKivaService.Entities.Requests;
+using FSMKivaService.Entities.Responses;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -38,6 +39,37 @@ namespace FSMKivaService.Data
 
         }
 
+        public SetSerialServiceStateResponse SetSerialServiceState(SetSerialServiceStateRequest request)
+        {
+            SqlParameter serialparameter = new SqlParameter("@serial_no", request.SerialNo);
+            SqlParameter cariParameter = new SqlParameter("@cari", request.Cari);
+            SqlParameter takipParameter = new SqlParameter("@takipNo", request.TakipNo);
+            SqlParameter[] p =  new SqlParameter[] { serialparameter, cariParameter, takipParameter };
+            
+
+            try
+            {
+                var res=this.Database.ExecuteSqlRaw(@"Z_KIVA_SET_SERIAL_SERVICE_STATE @serial_no,@cari,@takipNo", p);
+
+                              
+                return new SetSerialServiceStateResponse
+                {
+                    isSuccess=true,
+                    Message="İşlem başarılı"
+                };
+            }
+            catch (Exception e)
+            {
+                return new SetSerialServiceStateResponse
+                {
+                    isSuccess = true,
+                    Message = e.Message
+                };
+            }
+
+            
+
+        }
 
         public SerialInfo GetSerialInfo(GetSerialInfoRequest request)
         {
